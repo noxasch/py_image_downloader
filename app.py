@@ -4,13 +4,13 @@
 3. Get list of image from xpath - input xpath
 4. save image  - input save path
 """
-import requests
+import requests, os
 from requests.adapters import HTTPAdapter
 from urllib.parse import urlparse, urljoin
 from urllib3.util.retry import Retry
 from time import sleep
 from lxml import html
-from os.path import dirname
+# from os.path import dirname
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36",
@@ -40,11 +40,11 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
                                                      (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end='\r')
+    # print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end='\r')
+    print(f'\r{prefix} |{bar}| {percent} {suffix}', end='\r')
     # Print New Line on Complete
     if iteration == total:
         print()
-
 
 
 if __name__ == "__main__":
@@ -56,9 +56,9 @@ if __name__ == "__main__":
     response = s.get(url=URL, timeout=45)
     doc = html.fromstring(response.text)
     elements = doc.xpath("//img[@class='img-fluid']/@src")
-    print(len(elements))
-    base_url = dirname(URL)
-    print(base_url)
+    print(f"{len(elements)} image found")
+    base_url = os.path.dirname(URL)
+    # print(base_url)
     l = len(elements)
     printProgressBar(0, l, prefix='Progress:', suffix='Complete', length=50)
     for i, item in enumerate(elements):
@@ -67,6 +67,12 @@ if __name__ == "__main__":
         filename = str(item).split('/')[-1] # grab the filename and extension
         item = urljoin(base_url, item)
         response = s.get(url=item, timeout=45)
+        if not os.path.isdir('spline') and not os.path.exists('spline'):
+            os.makedirs('spline')
+        count = 1
+        while os.path.exists(f"spline/{filename}"):
+            filename = f"({count})_{filename}"
+            count += 1
         with open(f"spline/{filename}", 'wb') as f:
             f.write(response._content)
         sleep(2)
