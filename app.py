@@ -75,6 +75,5 @@ if __name__ == "__main__":
             count += 1
         with open(f"spline/{filename}", 'wb') as f:
             f.write(response._content)
-        sleep(2)
+        sleep(30) # any less will result in getting blocked
     print("test done")
-
