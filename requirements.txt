@@ -6,4 +6,4 @@ lxml==4.6.3
 pycodestyle==2.5.0
 requests==2.22.0
 selenium==3.141.0
-urllib3==1.25.7
+urllib3==1.26.5
