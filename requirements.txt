@@ -2,7 +2,7 @@ autopep8==1.4.4
 certifi==2019.11.28
 chardet==3.0.4
 idna==2.8
-lxml==4.6.3
+lxml==4.6.5
 pycodestyle==2.5.0
 requests==2.22.0
 selenium==3.141.0
